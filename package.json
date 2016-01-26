@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-jsx-underscore",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Plugin for Babel which converts JSX to Underscore templates",
   "main": "index.js",
   "scripts": {

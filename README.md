@@ -1,61 +1,23 @@
-[![Build Status](https://travis-ci.org/jsx-ir/babel-plugin-jsx.svg?branch=master)](https://travis-ci.org/jsx-ir/babel-plugin-jsx)
-
-## Babel Plugin for generating JSX-IR
+## Babel Plugin for generating Underscore JavaScript Templates
 
 ### Overview
 
-This plugin produces [JSX-IR](https://github.com/jsx-ir/spec) output of given JSX source. Main purpose of this plugin is to be used with [```jsx-runtime```](https://github.com/jsx-ir/jsx-runtime) and one or more its [renderers](https://github.com/jsx-ir?utf8=%E2%9C%93&query=jsx-to). But, of course, if could be used separately.
+This plugin produces [Underscore Templates](http://underscorejs.org/#template) output of given JSX source. *Currently For Babel 5*
 
 ### Installation
 
-```npm install  babel-plugin-jsx```
+```npm install  babel-plugin-jsx-underscore```
 
 ### Usage
 
 Basic usage look like this:
 ```js
 babel.transform(code, {
-  plugins: ['babel-plugin-jsx'],
+  plugins: ['babel-plugin-jsx-underscore'],
   blacklist: ['react']
 });
 ```
 or any other way described [here](http://babeljs.io/docs/advanced/plugins/#usage).
-
-### Advanced usage (options)
-
-Because Babel does not supports direct providing options for plugins (yet), here are some tricks:
-
-First of all, you need to require "plugin-generator" which will generate for you plugin instance with specified options:
-```js
-var jsx = require('babel-plugin-jsx/gen');
-```
-
-Next you can generate plugin on the fly if you are using ``babel-core`` directly:
-```js
-var jsx = require('babel-plugin-jsx/gen');
-var babel = require('babel-core');
-
-babel.transform(code, {
-  plugins: [jsx({
-    ... // options goes here
-  })],
-  blacklist: ['react']
-});
-```
-Or create special file in your package and use it as a module instead:
-```js
-// my-local-plugin.js
-module.exports = require('babel-plugin-jsx/gen')({
-  ... // options goes here
-});
-```
-then use it in other place like ``index.js``:
-```js
-babel.transform(code, {
-  plugins: ['./my-local-plugin'],
-  blacklist: ['react']
-});
-```
 
 #### Options and combinations
 
@@ -69,41 +31,22 @@ There is some number of options, first and main option is ```captureScope```:
 #### Example of input
 
 ```xml
-<div className="box">
-  <List>
-    <div className="list-wrap">
-      <ListItem index={ index } {... val } />
-    </div>
-  </List>
-</div>
+    <a class="anchor" href={"<%= data.href %>"}>
+        {"<%= data.content %>"}
+    </a>
 ```
 
 ### Example of output
 
 ```js
-({
-  tag: "div",
-  props: {
-    className: "box"
-  },
-  children: [{
-    tag: "List",
-    props: null,
-    children: [{
-      tag: "div",
-      props: {
-        className: "list-wrap"
-      },
-      children: [{
-        tag: "ListItem",
-        props: _extends({
-          index: index
-        }, val),
-        children: null
-      }]
-    }]
-  }]
-})
+function (data) {
+    var __t,
+        __p = '',
+        __j = Array.prototype.join,
+        print = function print() {
+        __p += __j.call(arguments, '');
+    };__p += '<a class=\'chemical-anchor\'href=\'' + ((__t = data.href) == null ? '' : __t) + '\'>' + ((__t = data.content) == null ? '' : __t) + '</a>';return __p;
+};
 ```
 
 ### License
